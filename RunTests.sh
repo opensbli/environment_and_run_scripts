@@ -10,6 +10,9 @@ function usage {
     echo "./$(basename $0) -H -> Specifying the HDF5 directory"
     echo "./$(basename $0) -e -> Sepcifying the environment directory."
     echo "./$(basename $0) -m -> Specifying the machine type"
+    echo "./$(basename $0) -l -> Use the OPS legacy translator"
+    echo "./$(basename $0) -q -> Perform a quick test using only the verification tests"
+    echo "./$(basename $0) -v -> Enable verbose output"
     echo "Machine type can be: Ubuntu ARCHER2 IRIDIS5 Fedora DAaaS"
     echo "If without specifying the machine, the script will assume all dependencies prepared!"
 }
@@ -17,14 +20,16 @@ function usage {
 Machine="None"
 ScriptPath="${BASH_SOURCE:-$0}"
 AbsolutScriptPath="$(realpath "${ScriptPath}")"
+LegacyTranslator="False"
 EnvDir="$(dirname "${AbsolutScriptPath}")"
+ScriptOptions=""
 
 if [ -d "${EnvDir}/HDF5" ]
 then
     export HDF5_INSTALL_PATH="${EnvDir}/HDF5"
 fi
 
-optstring="e:m:H:h"
+optstring="e:m:H:hlqv"
 
 while getopts ${optstring} options; do
     case ${options} in
@@ -40,6 +45,15 @@ while getopts ${optstring} options; do
         ;;
         m)
             Machine=${OPTARG}
+        ;;
+        l)
+            LegacyTranslator="True"
+        ;;
+        q)
+            ScriptOptions="--verif-only $ScriptOptions"
+        ;;
+        v)
+            ScriptOptions="--verbose $ScriptOptions"
         ;;
         :)
             echo "$0: Must supply an argument to -$OPTARG." >&2
@@ -88,7 +102,14 @@ fi
 
 source ${EnvDir}/Python/bin/activate "${EnvDir}/Python"
 export OPS_INSTALL_DIR=$EnvDir/OPS-INSTALL
-export OPS_TRANSLATOR=$OPS_INSTALL_DIR/bin/ops_translator/c
 export PYTHONPATH=$PYTHONPATH:$EnvDir/OpenSBLI
 
-python test_opensbli.py
+if [ $LegacyTranslator == "True" ]
+then
+    ScriptOptions="--legacy-translator $ScriptOptions"
+    export OPS_TRANSLATOR=$OPS_INSTALL_DIR/translator/ops_translator_legacy/c
+else
+    export OPS_TRANSLATOR=$OPS_INSTALL_DIR/translator/ops_translator/ops-translator/
+fi
+
+python test_opensbli.py $ScriptOptions
