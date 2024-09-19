@@ -38,7 +38,7 @@ while getopts ${optstring} options; do
             exit 0
         ;;
         H)
-            export HDF5_INSTALL_PATH="${EnvDir}/HDF5"
+            export HDF5_INSTALL_PATH="${OPTARG}"
         ;;
         e)
             EnvDir=${OPTARG}
@@ -113,3 +113,4 @@ else
 fi
 
 python test_opensbli.py $ScriptOptions
+
