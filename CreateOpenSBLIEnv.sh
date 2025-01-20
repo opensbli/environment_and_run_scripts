@@ -101,8 +101,8 @@ cd $Dir ## needed by normal version
 wget -c https://github.com/opensbli/environment_and_run_scripts/archive/refs/heads/main.zip
 unzip main.zip
 rm main.zip
-mv aosh-main/*  .
-rm -r -f aosh-main
+mv environment_and_run_scripts-main/*  .
+rm -r -f environment_and_run_scripts-main
 # Set the default machine in CompileC.sh changed from "Ubuntu" to "None"
 sed -i "s/Machine=\"None\"/Machine=\"${Machine}\"/g" CompileC.sh
 ## Install local HDF5 if needed

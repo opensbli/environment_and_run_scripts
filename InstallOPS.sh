@@ -109,6 +109,7 @@ then
     module load load-epcc-module
     module load cmake/3.21.3
     module load PrgEnv-gnu
+    module load cray-python/3.9.13.1
 
     if [ -z ${HDF5Root} ]
     then
@@ -125,6 +126,7 @@ then
     fi
     module load cuda/10.0
     module load cmake
+    module load python/3.9.7
 fi
 
 #https://github.com/OP-DSL/OPS/archive/refs/heads/feature/HDF5Slice.zip

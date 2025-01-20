@@ -73,6 +73,7 @@ then
     module load load-epcc-module
     module load cmake/3.21.3
     module load PrgEnv-gnu
+    module load cray-python/3.9.13.1
 
     if [ -z ${HDF5Root} ]
     then
@@ -89,6 +90,7 @@ then
     fi
     module load cuda/10.0
     module load cmake
+    module load python/3.9.7
 fi
 
 OpenSBLIBuild="BUILD_OPS_C_SAMPLE(OpenSBLI \"NONE\" \"NONE\" \"NONE\" \"NO\" \"NO\")"
@@ -96,6 +98,7 @@ OpenSBLIBuild="BUILD_OPS_C_SAMPLE(OpenSBLI \"NONE\" \"NONE\" \"NONE\" \"NO\" \"N
 cp $EnvDir/CMakeLists.txt .
 sed -i '/add_subdirectory/d' CMakeLists.txt
 sed -i "\$a${OpenSBLIBuild}" CMakeLists.txt
+rm -rf build
 mkdir build
 cd build
 cmake ../ -DOPS_INSTALL_DIR=$EnvDir/OPS-INSTALL -DCMAKE_BUILD_TYPE=Release -DOPS_TEST=OFF ${OPTIMISATION} -DAPP_INSTALL_DIR=$HOME/OPS-APP -DGPU_NUMBER=1 ${HDF5Root}
