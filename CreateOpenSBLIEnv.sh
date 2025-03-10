@@ -23,7 +23,7 @@ function usage {
 
 optstring="hb:o:d:pHC:m:"
 Compiler="Gnu"
-Branch="cpc_release"
+Branch="version3_cpc"
 Dir="$HOME/OpenSBLI"
 Machine="None"
 LocalHDF5="OFF"
